@@ -55,4 +55,15 @@ public class SalesServices {
 		
 	}
 
+	public boolean delectSaleProduct(int id) {
+		Order order =orderRepo.getOne(id);
+		if(order!=null) {
+			orderRepo.deleteById(id);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 }

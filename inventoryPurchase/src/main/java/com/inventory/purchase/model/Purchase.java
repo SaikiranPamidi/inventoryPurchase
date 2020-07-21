@@ -15,7 +15,7 @@ public class Purchase implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy= GenerationType.AUTO,
-    generator="native")	
+    generator="native_purchase")	
     @Column(name="id")
 	int id;
 	

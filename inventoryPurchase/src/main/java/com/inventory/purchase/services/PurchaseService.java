@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.inventory.purchase.dao.PurchaseRepo;
@@ -51,9 +52,10 @@ public class PurchaseService {
 			int rand_int1 = rand.nextInt(1000);
 			st.setStockID(rand_int1);
 			System.out.println(st);
-			storeServ.createProduct(st);
-			purchaseRepo.saveAndFlush(product);
-
+			ResponseEntity<String> entity=storeServ.createProduct(st);
+			if(entity.getBody().equalsIgnoreCase("Purchased Stocks to Store Successfull"))
+				purchaseRepo.saveAndFlush(product);
+			
 		} else {
 			stockList.forEach(x -> {
 				System.out.println("Stock Data : " + x);
@@ -68,14 +70,44 @@ public class PurchaseService {
 
 						Stocks updatedStock = storeServ.updateStocksQuantity(st);
 						System.out.println("Updated latest quantity" + updatedStock);
-						if (updatedStock.getStockAvailable() == latestQuantity)
+						if (updatedStock.getStockAvailable() == latestQuantity) {
 							purchaseRepo.saveAndFlush(product);
+							
+						}
 					}
+				} else {
+					
+					Stocks st = new Stocks();
+					st.setProductId(product.getProductId());
+					st.setProductName(product.getProductName());
+					st.setStockAvailable(product.getQuantity());
+					Random rand = new Random();
+					int rand_int1 = rand.nextInt(1000);
+					st.setStockID(rand_int1);
+					System.out.println(st);
+					ResponseEntity<String> entity=storeServ.createProduct(st);
+					if(entity.getBody().equalsIgnoreCase("Purchased Stocks to Store Successfull"))
+						purchaseRepo.saveAndFlush(product);
+					
 				}
+				
+				
 			});
 
 		}
+		
+	}
 
+	public boolean delectPurchaseProducts(int id) {
+	
+		Purchase product =purchaseRepo.getOne(id);
+		if(product!=null) {
+			purchaseRepo.deleteById(id);
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 }

@@ -17,7 +17,7 @@ public class Stocks implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy= GenerationType.AUTO,
-    generator="native")	
+    generator="native_store")	
     @Column(name="id")
 	int id;
 	
