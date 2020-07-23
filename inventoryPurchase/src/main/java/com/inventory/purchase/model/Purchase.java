@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -23,6 +25,7 @@ public class Purchase implements Serializable{
 	int stockId;
 	
 	@Column(name="product_id")
+	//@ManyToOne(targetEntity=Stocks.class)  
 	int productId;
 	
 	@Column(name="product_name")

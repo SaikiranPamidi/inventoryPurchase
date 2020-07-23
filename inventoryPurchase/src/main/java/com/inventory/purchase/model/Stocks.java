@@ -2,7 +2,9 @@ package com.inventory.purchase.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
 
+//@Entity
 public class Stocks implements Serializable {
 		
 	int id;

@@ -2,6 +2,8 @@ package com.inventory.purchase.conroller;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import com.inventory.purchase.services.PurchaseService;
 @RequestMapping("/api/v1")
 public class PurchaseController {
 	
+	Logger logger = LogManager.getLogger(PurchaseController.class);
+	
 	@Autowired
 	PurchaseService ps;
 	
@@ -36,7 +40,7 @@ public class PurchaseController {
 	
 	@PostMapping("/purchase")
 	public ResponseEntity<String> purchaseProducts(@RequestBody Purchase product) {
-		System.out.println(product);
+		logger.info(product);
 		ps.purchaseProducts(product);
 	 return new ResponseEntity<String>("Product got Added to Stock", HttpStatus.OK);
 	}
@@ -44,7 +48,7 @@ public class PurchaseController {
 	
 	@DeleteMapping("/deletePurchasedProduct/{id}")
 	public ResponseEntity<String> deletePurchasedProduct(@PathVariable("id") int id) {
-		System.out.println("deleting the product id :"+id);
+		logger.info("deleting the product id :"+id);
 		boolean status = ps.delectPurchaseProducts(id);
 		if(status==true)
 		  return new ResponseEntity<String>("Deleted Successfull", HttpStatus.OK);

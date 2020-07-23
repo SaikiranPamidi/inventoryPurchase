@@ -3,7 +3,10 @@ package com.inventory.products.controller;
 
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +25,8 @@ import com.inventory.products.services.StockService;
 @RequestMapping("/api/v1")
 public class HomeController {
 	
+	Logger logger = LogManager.getLogger(HomeController.class);
+	
 	@Autowired
 	StockService st;
 	
@@ -30,15 +35,16 @@ public class HomeController {
 	 return "welcome to Invenotry Application";
 	}
 	
+	//@Cacheable(value = "stocks")
 	@GetMapping("/getStockList")
 	public List<Stocks> getStocksAvailable(){
-		System.out.println("hitting Stock Services");
+		logger.info("hitting Stock Services");
 		return st.stocksAvailable();		
 	}
 	
 	@PostMapping("/createProduct")
 	public ResponseEntity<String> createProduct(@RequestBody Stocks stock) {
-		System.out.println(stock);
+		logger.info(stock);
 		st.createStocks(stock);
 	 return new ResponseEntity<String>("Purchased Stocks to Store Successfull", HttpStatus.CREATED);
 	}
@@ -46,7 +52,7 @@ public class HomeController {
 	
 	@PutMapping("/updateProduct")
 	public @ResponseBody Stocks updateProduct(@RequestBody Stocks stock) {
-		System.out.println(stock);
+		logger.info(stock);
 		Stocks result=st.updateStocks(stock);
 		
 	 return result;

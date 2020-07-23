@@ -8,7 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.inventory.sales.models.Stocks;
 
 @Entity
 @Table(name = "orders")
@@ -21,6 +25,8 @@ public class Order implements Serializable{
 	int id;
 	
 	@Column(name="product_id")
+	//@ManyToOne(targetEntity=Stocks.class) 
+	//@JoinColumn(name="product_id")
 	int productId;
 	
 	@Column(name="product_name")

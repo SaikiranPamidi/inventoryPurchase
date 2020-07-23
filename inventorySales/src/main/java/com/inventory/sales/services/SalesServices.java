@@ -2,6 +2,8 @@ package com.inventory.sales.services;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,8 @@ import com.inventory.sales.models.Stocks;
 @Component
 public class SalesServices {
 
+	Logger logger = LogManager.getLogger(SalesServices.class);
+	
 	@Autowired
 	OrderRepository orderRepo;
 
@@ -22,7 +26,7 @@ public class SalesServices {
 	public List<Order> getAllOrdersPlaced() {
 		// TODO Auto-generated method stub
 		List<Stocks> stockList = store.getStocksAvailable();
-		stockList.forEach(x -> System.out.println("Stock Data : " + x));
+		stockList.forEach(x -> logger.info("Stock Data : " + x));
 
 		List<Order> ordersList = orderRepo.findAll(Sort.by(Sort.Direction.DESC, "id"));
 		return ordersList;
@@ -33,7 +37,7 @@ public class SalesServices {
 		System.out.println(order);
 		List<Stocks> stockList = store.getStocksAvailable();
 		stockList.forEach(x -> {
-			System.out.println("Stock Data : " + x);
+			logger.info("Stock Data : " + x);
 			if(x.getProductName().equalsIgnoreCase(order.getProductName()))
 			{
 				System.out.println(x);
@@ -46,7 +50,7 @@ public class SalesServices {
 					st.setStockAvailable(latestQuantity);
 					st.setPurchased(st.getPurchased()+orderQuantity);
 					Stocks updatedStock=store.updateStocksQuantity(st);
-					System.out.println("Updated latest quantity");
+					logger.info("Updated latest quantity");
 					if(updatedStock.getStockAvailable()==latestQuantity)
 						orderRepo.saveAndFlush(order);
 				}

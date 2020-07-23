@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -11,25 +13,28 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.inventory.products.controller.HomeController;
 import com.inventory.products.dao.StockRepository;
 import com.inventory.products.models.Stocks;
 
 @Component
 public class StockService {
 	
+	Logger logger = LogManager.getLogger(StockService.class);
+	
 	@Autowired
 	StockRepository stockRepo;
 
 	public void createStocks(Stocks st) {
 		// TODO Auto-generated method stub
-		System.out.println(st);
+		logger.info(st);
 		stockRepo.saveAndFlush(st);
 				
 	}
 	
 	public List<Stocks> stocksAvailable() {
 		// TODO Auto-generated method stub
-		System.out.println("hit Store Service");
+		logger.info("hit Store Service");
 		List<Stocks> st= new ArrayList<Stocks>();
 		System.out.println(st);
 		st= stockRepo.findAll();
