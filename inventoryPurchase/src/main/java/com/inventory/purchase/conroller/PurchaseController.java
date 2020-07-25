@@ -42,7 +42,7 @@ public class PurchaseController {
 	public ResponseEntity<String> purchaseProducts(@RequestBody Purchase product) {
 		logger.info(product);
 		ps.purchaseProducts(product);
-	 return new ResponseEntity<String>("Product got Added to Stock", HttpStatus.OK);
+	 return new ResponseEntity<>("Product got Added to Stock", HttpStatus.OK);
 	}
 	
 	

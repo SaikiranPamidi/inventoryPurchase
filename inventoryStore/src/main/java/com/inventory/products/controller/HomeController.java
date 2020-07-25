@@ -6,11 +6,9 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,33 +35,32 @@ public class HomeController {
 	
 	//@Cacheable(value = "stocks")
 	@GetMapping("/getStockList")
-	public List<Stocks> getStocksAvailable(){
+	public ResponseEntity<List<Stocks>>  getStocksAvailable(){
 		logger.info("hitting Stock Services");
-		return st.stocksAvailable();		
+		List<Stocks> stocks=st.stocksAvailable();
+		return new ResponseEntity<>(stocks, HttpStatus.OK);
 	}
 	
 	@PostMapping("/createProduct")
 	public ResponseEntity<String> createProduct(@RequestBody Stocks stock) {
 		logger.info(stock);
 		st.createStocks(stock);
-	 return new ResponseEntity<String>("Purchased Stocks to Store Successfull", HttpStatus.CREATED);
+	 return new ResponseEntity<>("Purchased Stocks to Store Successfull", HttpStatus.CREATED);
 	}
 	
 	
 	@PutMapping("/updateProduct")
 	public @ResponseBody Stocks updateProduct(@RequestBody Stocks stock) {
+		logger.info("Updating product of");	
 		logger.info(stock);
-		Stocks result=st.updateStocks(stock);
-		
-	 return result;
+	    return st.updateStocks(stock);
 	}
 	
 	@PutMapping("/updateStockQuantity")
 	public @ResponseBody Stocks updateProductQuantity(@RequestBody Stocks stock) {
-		System.out.println("quantity updation stock id :"+stock);
-		Stocks result=st.updateQuantityStocks(stock);
-		
-	 return result;
+		logger.info("Updating product Quantity of");	
+		logger.info(stock);	
+		return st.updateQuantityStocks(stock);
 	}
 
 }

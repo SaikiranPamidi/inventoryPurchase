@@ -7,14 +7,11 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.inventory.products.controller.HomeController;
 import com.inventory.products.dao.StockRepository;
+import com.inventory.products.exception.NoDataFoundException;
+import com.inventory.products.exception.ProductNotFoundException;
 import com.inventory.products.models.Stocks;
 
 @Component
@@ -26,53 +23,36 @@ public class StockService {
 	StockRepository stockRepo;
 
 	public void createStocks(Stocks st) {
-		// TODO Auto-generated method stub
+		
 		logger.info(st);
 		stockRepo.saveAndFlush(st);
 				
 	}
 	
 	public List<Stocks> stocksAvailable() {
-		// TODO Auto-generated method stub
 		logger.info("hit Store Service");
-		List<Stocks> st= new ArrayList<Stocks>();
-		System.out.println(st);
+		List<Stocks> st= new ArrayList<>();
+		logger.info(st);
 		st= stockRepo.findAll();
-		if(st.isEmpty())
-			return null;
-		else
-			return st;
-	}
-
-	
-	public void removeProduct(int productID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
-	public Stocks updateStocks(Stocks stock) {
-		
-		// TODO Auto-generated method stub
-		stockRepo.save(stock);
-		Stocks st= stockRepo.getOne(stock.getId());
 		return st;
+	}
+
+
+	
+	public Stocks updateStocks(Stocks stock) {	
+		stockRepo.save(stock);
+		return stockRepo.getOne(stock.getId());
 	}
 	
 	public Stocks updateQuantityStocks(Stocks stock) {
 		
-		// TODO Auto-generated method stub
-		//Optional<Stocks> stock = stockRepo.findById(stock.get().getId());
-		//Stocks st=null;
-		Optional<Stocks> updateStock =null;
+		Stocks updateStock = null;
 		if(stock!=null) {						
 			stockRepo.saveAndFlush(stock);
-			updateStock = stockRepo.findById(stock.getId());
+			updateStock = stockRepo.findById(stock.getId()).orElseThrow(() -> new ProductNotFoundException(stock.getId()));			
 		}
-		if(updateStock.isPresent())
-			return updateStock.get();
-		else
-			return null;
+		
+		return updateStock;		
 	}
 
 
