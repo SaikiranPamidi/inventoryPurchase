@@ -41,20 +41,20 @@ public class SalesController {
 	}
 	
 	@PostMapping("/placeOrder")
-	public String pleaceOrder(@RequestBody Order order) {
+	public ResponseEntity<String> pleaceOrder(@RequestBody Order order) {
 		logger.info(order);
 		sale.placeOrder(order);
-	 return "Order Placed";
+	 return new ResponseEntity<>("Order Placed", HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/deleteSalesOrder/{id}")
-	public ResponseEntity<String> deletePurchasedProduct(@PathVariable("id") int id) {
-		logger.info("deleting the product id :"+id);
+	public ResponseEntity<String> deleteOrderedProduct(@PathVariable("id") int id) {
+		logger.info("deleting the product id : %d",id);
 		boolean status = sale.delectSaleProduct(id);
-		if(status==true)
-		  return new ResponseEntity<String>("Deleted Successfull", HttpStatus.OK);
+		if(status)
+		  return new ResponseEntity<>("Deleted Successfull", HttpStatus.OK);
 		else
-		  return new ResponseEntity<String>("No Record Found in DB", HttpStatus.BAD_REQUEST);
+		  return new ResponseEntity<>("No Record Found in DB", HttpStatus.BAD_REQUEST);
 				 
 	}
 	

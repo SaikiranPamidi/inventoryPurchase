@@ -24,23 +24,19 @@ public class SalesServices {
 	private StoreService store;
 
 	public List<Order> getAllOrdersPlaced() {
-		// TODO Auto-generated method stub
 		List<Stocks> stockList = store.getStocksAvailable();
-		stockList.forEach(x -> logger.info("Stock Data : " + x));
-
-		List<Order> ordersList = orderRepo.findAll(Sort.by(Sort.Direction.DESC, "id"));
-		return ordersList;
+		stockList.forEach(x -> logger.info("Stock Data : {}" , x));
+		return orderRepo.findAll();
 	}
 
 	public void placeOrder(Order order) {
 
-		System.out.println(order);
+		logger.info("Order Data : {}" , order);
 		List<Stocks> stockList = store.getStocksAvailable();
 		stockList.forEach(x -> {
-			logger.info("Stock Data : " + x);
+			logger.info("Stock Data : {}" , x);
 			if(x.getProductName().equalsIgnoreCase(order.getProductName()))
 			{
-				System.out.println(x);
 				int orderQuantity=0;
 				orderQuantity=order.getQuantity();
 				if(orderQuantity<=x.getStockAvailable())
