@@ -1,4 +1,4 @@
-package com.inventory.products.controller;
+package com.inventory.purchase.controller;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,60 +18,66 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.inventory.products.models.Stocks;
-import com.inventory.products.services.StockService;
+import com.inventory.purchase.services.PurchaseService;
+import com.inventory.purchase.conroller.PurchaseController;
+import com.inventory.purchase.model.Purchase;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = HomeController.class)
-class HomeControllerTest {
+@WebMvcTest(value = PurchaseController.class)
+class PurchaseControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
-	private StockService stockService;
+	private PurchaseService purchaseService;
 
-	Stocks mockstock = new Stocks();
+	Purchase mockPurchase = new Purchase();
 
-	List<Stocks> mockList = new ArrayList<>();
+	List<Purchase> mockList = new ArrayList<>();
 	
-	String mockStockJson = "{\"stockID\":10,\"productId\":10,\"productName\":\"Tables\",\"stockAvailable\":2011,\"purchased\":0}";
+	String mockPurchaseJson = "{\"productId\":20,\"productName\":\"Tables\",\"quantity\":100,\"stockID\":10}";
 
 	@Test
-	void getStocksAvailable() throws Exception {
+	void getPurchasedProducts() throws Exception {
 
-		mockstock.setId(1);
-		mockstock.setProductId("10");
-		mockstock.setProductName("Tables");
-		mockstock.setPurchased(0);
-		mockstock.setStockAvailable(2011);
-		mockstock.setStockID(10);
+		mockPurchase.setId(1);
+		mockPurchase.setProductId(20);
+		mockPurchase.setProductName("Tables");
+		mockPurchase.setQuantity(100);
+		mockPurchase.setStockId(10);
 
-		mockList.add(mockstock);
+		mockList.add(mockPurchase);
 
-		Mockito.when(stockService.stocksAvailable()).thenReturn(mockList);
+		Mockito.when(purchaseService.purchasedProducts()).thenReturn(mockList);
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/getStockList")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/getPurchasedList")
 				.accept(MediaType.APPLICATION_JSON);
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-		String expected = "[\r\n" + "    {\r\n" + "        \"id\": 1,\r\n" + "        \"stockID\": 10,\r\n"
-				+ "        \"productId\": \"10\",\r\n" + "        \"productName\": \"Tables\",\r\n"
-				+ "        \"stockAvailable\": 2011,\r\n" + "        \"purchased\": 0\r\n" + "    }\r\n" + "]";
+		String expected = "[\r\n" + 
+				"    {\r\n" + 
+				"        \"id\": 1,\r\n" + 
+				"        \"stockId\": 10,\r\n" + 
+				"        \"productId\": 20,\r\n" + 
+				"        \"productName\": \"Tables\",\r\n" + 
+				"        \"quantity\": 100\r\n" + 
+				"    }\r\n" + 
+				"]";
 
 		JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
 	}
 
 	
 	@Test
-	void createProduct() throws Exception { 
+	void purchaseProducts() throws Exception { 
 				
 		RequestBuilder requestBuilder =
-				 MockMvcRequestBuilders.post("http://localhost/api/v1/createProduct")
-				 .accept(MediaType.APPLICATION_JSON).content(mockStockJson).contentType(MediaType.
+				 MockMvcRequestBuilders.post("http://localhost/api/v1/purchase")
+				 .accept(MediaType.APPLICATION_JSON).content(mockPurchaseJson).contentType(MediaType.
 				 APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		int resultStatus = result.getResponse().getStatus();
@@ -80,19 +86,19 @@ class HomeControllerTest {
 	}
 
 	@Test
-	void updateProduct() throws Exception { 
+	void deletePurchasedProduct() throws Exception { 
 		
 		RequestBuilder requestBuilder =
-				 MockMvcRequestBuilders.put("http://localhost/api/v1/updateProduct")
-				 .accept(MediaType.APPLICATION_JSON).content(mockStockJson).contentType(MediaType.
-				 APPLICATION_JSON);
+				 MockMvcRequestBuilders.delete("http://localhost/api/v1/deletePurchasedProduct/1");
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		int resultStatus = result.getResponse().getStatus();
-		assertEquals(200, resultStatus);
+		String resultBody = result.getResponse().getContentAsString();
+		assertEquals(400, resultStatus);
+		assertEquals("No Record Found in DB", resultBody);
 	}
 	
 	
-	@Test
+	/*@Test
 	void updateProductQuantity() throws Exception { 
 		
 		mockstock.setId(1);
@@ -110,5 +116,5 @@ class HomeControllerTest {
 		int resultStatus = result.getResponse().getStatus();
 		assertEquals(200, resultStatus);
 	
-	}
+	}*/
 }

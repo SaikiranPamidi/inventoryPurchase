@@ -42,18 +42,18 @@ public class PurchaseController {
 	public ResponseEntity<String> purchaseProducts(@RequestBody Purchase product) {
 		logger.info(product);
 		ps.purchaseProducts(product);
-	 return new ResponseEntity<>("Product got Added to Stock", HttpStatus.OK);
+	 return new ResponseEntity<>("Product got Added to Stock", HttpStatus.CREATED);
 	}
 	
 	
 	@DeleteMapping("/deletePurchasedProduct/{id}")
 	public ResponseEntity<String> deletePurchasedProduct(@PathVariable("id") int id) {
-		logger.info("deleting the product id :"+id);
+		logger.info("deleting the product id : %d", id);
 		boolean status = ps.delectPurchaseProducts(id);
-		if(status==true)
-		  return new ResponseEntity<String>("Deleted Successfull", HttpStatus.OK);
+		if(status)
+		  return new ResponseEntity<>("Deleted Successfull", HttpStatus.OK);
 		else
-		  return new ResponseEntity<String>("No Record Found in DB", HttpStatus.BAD_REQUEST);
+		  return new ResponseEntity<>("No Record Found in DB", HttpStatus.BAD_REQUEST);
 				 
 	}
 }

@@ -2,15 +2,12 @@ package com.inventory.products.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.inventory.products.dao.StockRepository;
-import com.inventory.products.exception.NoDataFoundException;
 import com.inventory.products.exception.ProductNotFoundException;
 import com.inventory.products.models.Stocks;
 
@@ -51,7 +48,8 @@ public class StockService {
 			stockRepo.saveAndFlush(stock);
 			updateStock = stockRepo.findById(stock.getId()).orElseThrow(() -> new ProductNotFoundException(stock.getId()));			
 		}
-		
+		logger.info(stock);
+		logger.info(updateStock);
 		return updateStock;		
 	}
 
