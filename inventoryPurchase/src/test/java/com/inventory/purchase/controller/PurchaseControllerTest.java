@@ -39,6 +39,16 @@ class PurchaseControllerTest {
 	List<Purchase> mockList = new ArrayList<>();
 	
 	String mockPurchaseJson = "{\"productId\":20,\"productName\":\"Tables\",\"quantity\":100,\"stockID\":10}";
+	
+	@Test
+	void home() throws Exception{
+		
+		RequestBuilder requestBuilder =
+				 MockMvcRequestBuilders.get("http://localhost/api/v1/");
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		String resultBody = result.getResponse().getContentAsString();
+		assertEquals("welcome to Invenotry Purchase Department", resultBody);
+	}
 
 	@Test
 	void getPurchasedProducts() throws Exception {
@@ -97,24 +107,18 @@ class PurchaseControllerTest {
 		assertEquals("No Record Found in DB", resultBody);
 	}
 	
-	
-	/*@Test
-	void updateProductQuantity() throws Exception { 
+	@Test
+	void deletePurchasedProductCase2() throws Exception { 
 		
-		mockstock.setId(1);
-		mockstock.setProductId("10");
-		mockstock.setProductName("Tables");
-		mockstock.setPurchased(0);
-		mockstock.setStockAvailable(2011);
-		mockstock.setStockID(10);
+		Mockito.when(purchaseService.delectPurchaseProducts(1)).thenReturn(true);
 		
 		RequestBuilder requestBuilder =
-				 MockMvcRequestBuilders.put("http://localhost/api/v1/updateStockQuantity")
-				 .accept(MediaType.APPLICATION_JSON).content(mockStockJson).contentType(MediaType.
-				 APPLICATION_JSON);
+				 MockMvcRequestBuilders.delete("http://localhost/api/v1/deletePurchasedProduct/1");
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		int resultStatus = result.getResponse().getStatus();
+		String resultBody = result.getResponse().getContentAsString();
 		assertEquals(200, resultStatus);
-	
-	}*/
+		assertEquals("Deleted Successfull", resultBody);
+	}
+
 }

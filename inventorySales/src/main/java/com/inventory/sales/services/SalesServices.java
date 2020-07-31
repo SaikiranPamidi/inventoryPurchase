@@ -1,11 +1,11 @@
 package com.inventory.sales.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.inventory.sales.dao.OrderRepository;
@@ -29,8 +29,10 @@ public class SalesServices {
 		return orderRepo.findAll();
 	}
 
-	public void placeOrder(Order order) {
+	public List<Order> placeOrder(Order order) {
 
+		List<Order> orderedProduct = new ArrayList<>();
+		
 		logger.info("Order Data : {}" , order);
 		List<Stocks> stockList = store.getStocksAvailable();
 		stockList.forEach(x -> {
@@ -46,17 +48,21 @@ public class SalesServices {
 					st.setStockAvailable(latestQuantity);
 					st.setPurchased(st.getPurchased()+orderQuantity);
 					Stocks updatedStock=store.updateStocksQuantity(st);
-					logger.info("Updated latest quantity");
-					if(updatedStock.getStockAvailable()==latestQuantity)
-						orderRepo.saveAndFlush(order);
+					logger.info("Updated latest quantity {}", updatedStock);
+					if(updatedStock.getStockAvailable()==latestQuantity) {
+						Order ordered =orderRepo.saveAndFlush(order);
+						orderedProduct.add(ordered);
+						logger.info("Order Product update to DB");
+					}
 				}
 			}
 		});
 		
+		return orderedProduct;		
 	}
 
 	public boolean delectSaleProduct(int id) {
-		Order order =orderRepo.getOne(id);
+		Order order=orderRepo.findById(id).orElseThrow();
 		if(order!=null) {
 			orderRepo.deleteById(id);
 			return true;

@@ -1,4 +1,4 @@
-package com.inventory.sales.exception;
+package com.inventory.purchase.exception;
 
 public class ProductNotFoundException extends RuntimeException {
 	
@@ -9,7 +9,7 @@ public class ProductNotFoundException extends RuntimeException {
 
 	public ProductNotFoundException(int id) {
 
-        super(String.format("Product not found %d",  id));
+        super(String.format("Product not found %d ",  id));
     }
 	
 }

@@ -6,7 +6,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import com.inventory.sales.models.Order;
 import com.inventory.sales.models.Stocks;
 
 //@FeignClient(url = "http://skinventorystore-env.eba-cs7wdrvr.us-east-2.elasticbeanstalk.com",name="INVENTORY-STORE")

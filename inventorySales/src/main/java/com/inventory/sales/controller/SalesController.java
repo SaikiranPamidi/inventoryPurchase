@@ -43,8 +43,11 @@ public class SalesController {
 	@PostMapping("/placeOrder")
 	public ResponseEntity<String> pleaceOrder(@RequestBody Order order) {
 		logger.info(order);
-		sale.placeOrder(order);
-	 return new ResponseEntity<>("Order Placed", HttpStatus.CREATED);
+		List<Order> orders = sale.placeOrder(order);
+		if(!orders.isEmpty())
+			return new ResponseEntity<>("Order Placed", HttpStatus.CREATED);
+		else
+			return new ResponseEntity<>("Order Not Placed", HttpStatus.BAD_REQUEST);
 	}
 	
 	@DeleteMapping("/deleteSalesOrder/{id}")

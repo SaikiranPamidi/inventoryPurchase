@@ -38,6 +38,16 @@ class SalesControllerTest {
 	List<Order> mockList = new ArrayList<>();
 	
 	String mockOrderJson = "{\"productId\":20,\"productName\":\"Tables\",\"quantity\":100}";
+	
+	@Test
+	void home() throws Exception{
+		
+		RequestBuilder requestBuilder =
+				 MockMvcRequestBuilders.get("http://localhost/api/v1/");
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		String resultBody = result.getResponse().getContentAsString();
+		assertEquals("welcome to Sales Department of Inventory Application", resultBody);
+	}
 
 	@Test
 	void getStocksAvailable() throws Exception {
@@ -78,7 +88,7 @@ class SalesControllerTest {
 				 APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		int resultStatus = result.getResponse().getStatus();
-		assertEquals(201, resultStatus);
+		assertEquals(400, resultStatus);
 		
 	}
 
@@ -91,7 +101,23 @@ class SalesControllerTest {
 		int resultStatus = result.getResponse().getStatus();
 		String resultBody = result.getResponse().getContentAsString();
 		assertEquals(400, resultStatus);
-		assertEquals("No Record Found in DB", resultBody);
+		assertEquals("No Record Found in DB", resultBody);	
+		
+	}
+	
+	@Test
+	void deleteOrderedProductTest() throws Exception { 
+		
+		RequestBuilder requestBuilder =
+				 MockMvcRequestBuilders.delete("http://localhost/api/v1/deleteSalesOrder/1");
+		
+		Mockito.when(saleService.delectSaleProduct(1)).thenReturn(true);
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		int resultStatus = result.getResponse().getStatus();
+		String resultBody = result.getResponse().getContentAsString();
+		assertEquals(200, resultStatus);
+		assertEquals("Deleted Successfull", resultBody);	
+		
 	}
 	
 }

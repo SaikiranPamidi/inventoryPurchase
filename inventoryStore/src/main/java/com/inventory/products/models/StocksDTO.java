@@ -1,45 +1,19 @@
 package com.inventory.products.models;
 
-import java.io.Serializable;
+public class StocksDTO {
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-
-@Entity
-@Table(name = "sk_inventory_stocks")
-public class Stocks implements Serializable {
-
+	private int id;
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy= GenerationType.AUTO,
-    generator="native_store")	
-    @Column(name="id")
-	int id;
+   
+	private int stockID;
+   
+	private int productId;
+		
+	private String productName;
 	
-    @Column(name="stock_id")
-	int stockID;
-    	
-	@Column(name="product_id")
-	int productId;
+	private int stockAvailable;
 	
-	@Column(name="product_name")
-	String productName;
-	
-	@Column(name="stock_available")
-	int stockAvailable;
-	
-	@Column(name="purchased")
-	int purchased;
+	private int purchased;
 
 	public int getId() {
 		return id;
@@ -94,6 +68,4 @@ public class Stocks implements Serializable {
 		return "Stocks [id=" + id + ", stockID=" + stockID + ", productId=" + productId + ", productName=" + productName
 				+ ", stockAvailable=" + stockAvailable + ", purchased=" + purchased + "]";
 	}
-	
-	
 }

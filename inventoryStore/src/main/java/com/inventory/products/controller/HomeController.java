@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inventory.products.models.Stocks;
+import com.inventory.products.models.StocksDTO;
 import com.inventory.products.services.StockService;
 
 @RestController
@@ -28,9 +29,11 @@ public class HomeController {
 	@Autowired
 	StockService st;
 	
+	
+	
 	@GetMapping("")
-	public String home() {
-	 return "welcome to Invenotry Application";
+	public ResponseEntity<String> home() {
+	 return new ResponseEntity<>("welcome to Invenotry Application", HttpStatus.OK);
 	}
 	
 	//@Cacheable(value = "stocks")
@@ -42,25 +45,30 @@ public class HomeController {
 	}
 	
 	@PostMapping("/createProduct")
-	public ResponseEntity<String> createProduct(@RequestBody Stocks stock) {
-		logger.info(stock);
+	public ResponseEntity<String> createProduct(@RequestBody StocksDTO stocksDTO) {
+		logger.info(stocksDTO);
+		Stocks stock = st.convertToEntity(stocksDTO);
 		st.createStocks(stock);
 	 return new ResponseEntity<>("Purchased Stocks to Store Successfull", HttpStatus.CREATED);
 	}
 	
 	
+	
 	@PutMapping("/updateProduct")
-	public @ResponseBody Stocks updateProduct(@RequestBody Stocks stock) {
+	public @ResponseBody Stocks updateProduct(@RequestBody StocksDTO stocksDTO) {
 		logger.info("Updating product of");	
-		logger.info(stock);
+		logger.info(stocksDTO);
+		Stocks stock = st.convertToEntity(stocksDTO);
 	    return st.updateStocks(stock);
 	}
 	
 	@PutMapping("/updateStockQuantity")
-	public @ResponseBody Stocks updateProductQuantity(@RequestBody Stocks stock) {
+	public @ResponseBody Stocks updateProductQuantity(@RequestBody StocksDTO stocksDTO) {
 		logger.info("Updating product Quantity of");	
-		logger.info(stock);	
+		logger.info(stocksDTO);
+		Stocks stock = st.convertToEntity(stocksDTO);
 		return st.updateQuantityStocks(stock);
 	}
 
+	
 }
