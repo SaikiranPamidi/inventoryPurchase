@@ -3,7 +3,6 @@ package com.inventory.purchase.services;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,6 +20,6 @@ public interface InvStoreService {
 	public Stocks updateStocksQuantity(Stocks st);
 	
 	@PostMapping("/api/v1/createProduct")
-	public ResponseEntity<String> createProduct(Stocks st);
+	public String createProduct(Stocks st);
 	
 }

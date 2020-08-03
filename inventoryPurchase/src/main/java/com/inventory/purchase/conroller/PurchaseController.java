@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inventory.purchase.model.Purchase;
+import com.inventory.purchase.model.PurchaseDTO;
 import com.inventory.purchase.services.PurchaseService;
 
 @RestController
@@ -39,8 +40,9 @@ public class PurchaseController {
 	}
 	
 	@PostMapping("/purchase")
-	public ResponseEntity<String> purchaseProducts(@RequestBody Purchase product) {
-		logger.info(product);
+	public ResponseEntity<String> purchaseProducts(@RequestBody PurchaseDTO productDto) {
+		logger.info(productDto);
+		Purchase product = ps.convertToEntity(productDto);
 		ps.purchaseProducts(product);
 	 return new ResponseEntity<>("Product got Added to Stock", HttpStatus.CREATED);
 	}

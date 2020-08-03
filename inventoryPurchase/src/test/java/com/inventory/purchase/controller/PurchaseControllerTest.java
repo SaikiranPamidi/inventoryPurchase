@@ -19,8 +19,11 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.inventory.purchase.services.PurchaseService;
+import com.inventory.purchase.exception.NoDataFoundException;
+import com.inventory.purchase.exception.ProductNotFoundException;
 import com.inventory.purchase.conroller.PurchaseController;
 import com.inventory.purchase.model.Purchase;
+import com.inventory.purchase.model.PurchaseDTO;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -85,6 +88,23 @@ class PurchaseControllerTest {
 	@Test
 	void purchaseProducts() throws Exception { 
 				
+		
+		mockPurchase.setId(1);
+		mockPurchase.setProductId(20);
+		mockPurchase.setProductName("Tables");
+		mockPurchase.setQuantity(100);
+		mockPurchase.setStockId(10);
+		
+		PurchaseDTO mockPurchaseDto = new PurchaseDTO();
+		
+		mockPurchaseDto.setId(1);
+		mockPurchaseDto.setProductId(20);
+		mockPurchaseDto.setProductName("Tables");
+		mockPurchaseDto.setQuantity(100);
+		mockPurchaseDto.setStockId(10);
+		
+		Mockito.when(purchaseService.convertToEntity(mockPurchaseDto)).thenReturn(mockPurchase);
+
 		RequestBuilder requestBuilder =
 				 MockMvcRequestBuilders.post("http://localhost/api/v1/purchase")
 				 .accept(MediaType.APPLICATION_JSON).content(mockPurchaseJson).contentType(MediaType.
@@ -120,5 +140,31 @@ class PurchaseControllerTest {
 		assertEquals(200, resultStatus);
 		assertEquals("Deleted Successfull", resultBody);
 	}
+	
+	
+	@Test
+	void deletePurchasedProductCase3() throws Exception { 
+		
+		Mockito.when(purchaseService.delectPurchaseProducts(1)).thenThrow(new ProductNotFoundException(1));
+		
+		RequestBuilder requestBuilder =
+				 MockMvcRequestBuilders.delete("http://localhost/api/v1/deletePurchasedProduct/1");
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		int resultStatus = result.getResponse().getStatus();		
+		assertEquals(404, resultStatus);
+	}
+	
+	@Test
+	void getProductsPurchasedCase2() throws Exception {
 
+		Mockito.when(purchaseService.purchasedProducts()).thenThrow(new NoDataFoundException());
+
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/getPurchasedList")
+				.accept(MediaType.APPLICATION_JSON);
+
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		
+		assertEquals(404, result.getResponse().getStatus());
+	}
+	
 }

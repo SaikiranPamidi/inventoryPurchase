@@ -58,6 +58,9 @@ class StockServiceTest {
 		
 	}
 	
+	
+	
+	
 
 	@Test
 	void createStocks() throws Exception{

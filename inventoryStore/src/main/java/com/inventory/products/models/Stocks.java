@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "sk_inventory_stocks")
+@Table(name = "inventory_stocks")
 public class Stocks implements Serializable {
 
 	

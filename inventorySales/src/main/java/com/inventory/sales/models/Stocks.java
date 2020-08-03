@@ -14,7 +14,7 @@ public class Stocks implements Serializable {
 	
     int stockID;
     	
-	String productId;
+	int productId;
 	
 	String productName;
 	
@@ -38,12 +38,12 @@ public class Stocks implements Serializable {
 		this.stockID = stockID;
 	}
 
-	public String getProductId() {
+	public int getProductId() {
 		return productId;
 	}
 
-	public void setProductId(String productId) {
-		this.productId = productId;
+	public void setProductId(int i) {
+		this.productId = i;
 	}
 
 	public String getProductName() {

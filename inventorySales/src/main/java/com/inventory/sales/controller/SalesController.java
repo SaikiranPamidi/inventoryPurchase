@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inventory.sales.models.Order;
+import com.inventory.sales.models.OrderDTO;
 import com.inventory.sales.services.SalesServices;
 
 @RestController
@@ -41,9 +42,12 @@ public class SalesController {
 	}
 	
 	@PostMapping("/placeOrder")
-	public ResponseEntity<String> pleaceOrder(@RequestBody Order order) {
-		logger.info(order);
+	public ResponseEntity<String> pleaceOrder(@RequestBody OrderDTO orderDto) {
+		logger.info(orderDto);
+		Order order = sale.convertToEntity(orderDto);
+		logger.info(" converted entity {}", order);
 		List<Order> orders = sale.placeOrder(order);
+		logger.info(" placed order {}", orders);
 		if(!orders.isEmpty())
 			return new ResponseEntity<>("Order Placed", HttpStatus.CREATED);
 		else

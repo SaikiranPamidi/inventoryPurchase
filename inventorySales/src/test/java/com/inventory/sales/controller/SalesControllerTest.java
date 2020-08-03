@@ -18,10 +18,14 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import com.inventory.sales.exception.NoDataFoundException;
+import com.inventory.sales.exception.ProductNotFoundException;
 import com.inventory.sales.models.Order;
+import com.inventory.sales.models.OrderDTO;
 import com.inventory.sales.services.SalesServices;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = SalesController.class)
@@ -56,6 +60,7 @@ class SalesControllerTest {
 		mockOrder.setProductId(20);
 		mockOrder.setProductName("Tables");
 		mockOrder.setQuantity(100);
+		mockOrder.setOrderedDate(null);
 		
 		mockList.add(mockOrder);
 
@@ -80,6 +85,21 @@ class SalesControllerTest {
 
 	
 	@Test
+	void getStocksAvailableCase2() throws Exception {
+
+		
+		Mockito.when(saleService.getAllOrdersPlaced()).thenThrow(new NoDataFoundException());
+
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/getSalesList")
+				.accept(MediaType.APPLICATION_JSON);
+
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+		assertEquals(404, result.getResponse().getStatus());
+	}
+
+	
+	@Test
 	void placeOrder() throws Exception { 
 				
 		RequestBuilder requestBuilder =
@@ -89,6 +109,36 @@ class SalesControllerTest {
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		int resultStatus = result.getResponse().getStatus();
 		assertEquals(400, resultStatus);
+		
+	}
+	
+	@Test
+	void placeOrderCase2() throws Exception { 
+		OrderDTO mock=new OrderDTO();
+		mock.setProductId(20);
+		mock.setProductName("Tables");
+		mock.setQuantity(100);
+		mock.setOrderedDate(null);
+		
+		mockOrder.setProductId(20);
+		mockOrder.setProductName("Tables");
+		mockOrder.setQuantity(100);
+		mockOrder.setOrderedDate(null);
+		
+		mockList.add(mockOrder);
+		
+		Mockito.when(saleService.convertToEntity(mock)).thenReturn(mockOrder);
+
+		Mockito.when(saleService.placeOrder(mockOrder)).thenReturn(mockList);
+
+		
+		RequestBuilder requestBuilder =
+				 MockMvcRequestBuilders.post("http://localhost/api/v1/placeOrder")
+				 .accept(MediaType.APPLICATION_JSON).content(mockOrderJson).contentType(MediaType.
+				 APPLICATION_JSON);
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		int resultStatus = result.getResponse().getStatus();
+		assertEquals(201, resultStatus);
 		
 	}
 
@@ -118,6 +168,18 @@ class SalesControllerTest {
 		assertEquals(200, resultStatus);
 		assertEquals("Deleted Successfull", resultBody);	
 		
+	}
+	
+	@Test
+	void deleteOrderedProductCase3() throws Exception { 
+		
+		Mockito.when(saleService.delectSaleProduct(1)).thenThrow(new ProductNotFoundException(1));
+		
+		RequestBuilder requestBuilder =
+				 MockMvcRequestBuilders.delete("http://localhost/api/v1/deleteSalesOrder/1");
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		int resultStatus = result.getResponse().getStatus();		
+		assertEquals(404, resultStatus);
 	}
 	
 }

@@ -15,60 +15,52 @@ import com.inventory.products.models.StocksDTO;
 
 @Component
 public class StockService {
-	
+
 	Logger logger = LogManager.getLogger(StockService.class);
-	
+
 	@Autowired
 	StockRepository stockRepo;
-	
+
 	@Autowired
-    ModelMapper modelMapper;
+	ModelMapper modelMapper;
 
 	public String createStocks(Stocks st) {
-		
+
 		logger.info(st);
 		stockRepo.saveAndFlush(st);
-		return "added to store";		
+		return "added to store";
 	}
-	
+
 	public List<Stocks> stocksAvailable() {
 		logger.info("hit Store Service");
-		List<Stocks> st= new ArrayList<>();
+		List<Stocks> st = new ArrayList<>();
 		logger.info(st);
-		st= stockRepo.findAll();
+		st = stockRepo.findAll();
 		return st;
 	}
 
-	
-	public Stocks updateStocks(Stocks stock) {	
+	public Stocks updateStocks(Stocks stock) {
 		stockRepo.save(stock);
 		return stockRepo.getOne(stock.getId());
 	}
-	
+
 	public Stocks updateQuantityStocks(Stocks stock) {
-		
+
 		Stocks updateStock = null;
-		if(stock!=null) {						
+		if (stock != null) {
 			stockRepo.saveAndFlush(stock);
-			updateStock = stockRepo.findById(stock.getId()).orElseThrow(() -> new ProductNotFoundException(stock.getId()));			
+			updateStock = stockRepo.findById(stock.getId())
+					.orElseThrow(() -> new ProductNotFoundException(stock.getId()));
 		}
 		logger.info(stock);
 		logger.info(updateStock);
-		return updateStock;		
+		return updateStock;
 	}
 
+	public Stocks convertToEntity(StocksDTO stocksDto) {
 
-	public Stocks convertToEntity(StocksDTO stocksDto)  {
-		if(stocksDto!=null) {
-			logger.info(stocksDto);
-			return modelMapper.map(stocksDto, Stocks.class);
-		}
-		else
-		{
-			logger.info(stocksDto);
-			return null;
-		}
+		logger.info(stocksDto);
+		return modelMapper.map(stocksDto, Stocks.class);
 	}
-	
 
 }

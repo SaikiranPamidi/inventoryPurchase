@@ -45,11 +45,11 @@ public class HomeController {
 	}
 	
 	@PostMapping("/createProduct")
-	public ResponseEntity<String> createProduct(@RequestBody StocksDTO stocksDTO) {
+	public String createProduct(@RequestBody StocksDTO stocksDTO) {
 		logger.info(stocksDTO);
 		Stocks stock = st.convertToEntity(stocksDTO);
 		st.createStocks(stock);
-	 return new ResponseEntity<>("Purchased Stocks to Store Successfull", HttpStatus.CREATED);
+	 return "Purchased Stocks to Store Successfull";
 	}
 	
 	

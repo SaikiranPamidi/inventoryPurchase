@@ -19,17 +19,17 @@
 		<java.version>1.8</java.version>
 		<junit-jupiter.version>5.3.2</junit-jupiter.version>
 		<mockito.version>2.24.0</mockito.version>
-		
+
 		<sonar.language>java</sonar.language>
 	</properties>
 
 	<dependencies>
-	<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-security</artifactId> 
+		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-security</artifactId> 
 			</dependency> Write your comment -->
 		<dependency>
-		    <groupId>org.modelmapper</groupId>
-		    <artifactId>modelmapper</artifactId>
-		    <version>2.3.5</version>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.3.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -101,6 +101,14 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.12</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.easymock</groupId>
+		    <artifactId>easymock</artifactId>
+		    <version>4.2</version>
+		    <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.sonarsource.scanner.maven</groupId>
@@ -154,7 +162,7 @@
 							<goal>repackage</goal>
 						</goals>
 					</execution>
-				</executions>				
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
@@ -176,6 +184,19 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+		      <groupId>org.projectlombok</groupId>
+		      <artifactId>lombok-maven-plugin</artifactId>
+		      <version>1.18.12.0</version>
+		      <executions>
+		        <execution>
+		          <phase>generate-sources</phase>
+		          <goals>
+		            <goal>delombok</goal>
+		          </goals>
+		        </execution>
+		      </executions>
+		    </plugin>
 		</plugins>
 	</build>
 
