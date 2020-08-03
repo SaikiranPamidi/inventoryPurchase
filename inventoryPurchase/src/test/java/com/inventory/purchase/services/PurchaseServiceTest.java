@@ -178,5 +178,55 @@ class PurchaseServiceTest {
 		assertEquals(true, status);
 		
 	}
+	
+	
+	/*
+	 * @Test void purchaseProductsCase1() throws Exception {
+	 * 
+	 * Stocks stock = new Stocks(); stock.setId(1); stock.setProductId(10);
+	 * stock.setProductName("Chairs"); stock.setPurchased(0);
+	 * stock.setStockAvailable(2011); stock.setStockID(100);
+	 * 
+	 * List<Stocks> stockList = new ArrayList<>(); stockList.add(stock);
+	 * 
+	 * Purchase purchase = new Purchase(); purchase.setId(1);
+	 * purchase.setProductId(10); purchase.setProductName("Tables");
+	 * purchase.setQuantity(1000); purchase.setStockId(100);
+	 * 
+	 * List<Stocks> excepted = new ArrayList<>(); Stocks stockExcepted = new
+	 * Stocks(); stockExcepted.setProductId(10);
+	 * stockExcepted.setProductName("Tables"); stockExcepted.setPurchased(0);
+	 * stockExcepted.setStockAvailable(1000); stockExcepted.setStockID(100);
+	 * excepted.add(stockExcepted);
+	 * 
+	 * Mockito.when(storeService.getStocksAvailable()).thenReturn(stockList);
+	 * Mockito.when(storeService.createProduct(stockExcepted)).
+	 * thenReturn("Purchased Stocks to Store Successfull");
+	 * Mockito.when(purchaseRepo.saveAndFlush(purchase)).thenReturn(purchase);
+	 * 
+	 * //Mockito.when(purchaseService.compareWithProductName(stockList, purchase));
+	 * boolean status = purchaseService.purchaseProducts(purchase);
+	 * assertEquals(true, status);
+	 * 
+	 * }
+	 */
+	
+	@Test
+	void purchaseProductsCase2() throws Exception {
+		Stocks stock=new Stocks();
+		stock.setId(1);
+		stock.setProductId(10);
+		stock.setProductName("Chairs");
+		stock.setPurchased(0);
+		stock.setStockAvailable(2011);
+		stock.setStockID(100);
+		
+		assertEquals(10, stock.getProductId());
+		assertEquals(1, stock.getId());
+		assertEquals(0, stock.getPurchased());
+		assertEquals(2011, stock.getStockAvailable());
+		assertEquals(100, stock.getStockID());
+		
+	}
 
 }
